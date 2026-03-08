@@ -11,6 +11,36 @@ A research-grade, full-stack platform for parameter-efficient fine-tuning (LoRA)
 
 ---
 
+## Project Poster
+
+![Project Poster](images/project_poster.png)
+
+---
+
+## System Architecture
+
+![System Architecture](images/system_architecture.png)
+
+---
+
+## LoRA Theory
+
+![LoRA Theory](images/lora_theory.png)
+
+---
+
+## LoRA Architecture
+
+![LoRA Architecture](images/lora_architecture.png)
+
+---
+
+## Training Flow
+
+![Training Flow](images/training_flow.png)
+
+---
+
 ## Features
 
 ### Training Pipeline
@@ -44,38 +74,31 @@ A research-grade, full-stack platform for parameter-efficient fine-tuning (LoRA)
 
 ---
 
-## System Architecture
+## UI Screenshots
 
-```
-USER INTERFACE (Next.js)
-  ├── Home
-  ├── Training
-  ├── Generate
-  ├── Gallery
-  └── Datasets
-         │
-         ▼
-   Next.js API (Port 3000)
-         │
-    ┌────┴────┐
-    │         │
-Generate   Training
-    │         │
-    └────┬────┘
-         │
-   FastAPI Backend (Port 8000)
-    ┌────┼────┐
-    │    │    │
-Inference LoRA  Safety
-Trainer Filter  │
-    │    │    │
-    └────┼────┘
-         │
-   Supabase Database
-  - generations
-  - training_runs
-  - datasets
-```
+### Home Dashboard
+
+![Home GUI](images/home_gui.png)
+
+### Training Interface
+
+![Training GUI](images/training_gui.png)
+
+### Generation Interface
+
+![Generate GUI](images/generate_gui.png)
+
+### Gallery
+
+![Gallery GUI](images/gallery_gui.png)
+
+### Dataset Management
+
+![Dataset GUI](images/dataset_gui.png)
+
+### Evaluation
+
+![Evaluation GUI](images/evaluation_gui.png)
 
 ---
 
@@ -204,12 +227,13 @@ diffusion-finetune/
 │   ├── app/
 │   │   ├── page.tsx           # Home/Dashboard
 │   │   ├── training/          # Training UI
-│   │   ├── generate/         # Generation UI
+│   │   ├── generate/          # Generation UI
 │   │   ├── gallery/           # Image gallery
 │   │   ├── datasets/          # Dataset management
 │   │   └── evaluation/        # Model evaluation
 │   ├── components/            # Reusable UI components
 │   └── lib/                   # API utilities
+├── images/                     # Documentation images
 ├── supabase_schema.sql         # Database schema
 ├── docker-compose.yml          # Docker orchestration
 └── start.sh                   # Quick start script
