@@ -1,0 +1,38 @@
+[
+    {
+        "category": "Cinematic & Photography",
+        "prompts": [
+            "A stunning oil painting of a mountain lake at sunset, ultra-detailed, cinematic lighting",
+            "Cinematic portrait of a cyberpunk hacker, dramatic lighting, shallow depth of field, 85mm lens, neon reflections",
+            "Street photography of Tokyo at night in the train, rainy, reflections, ultra realistic, highly detailed",
+            "Studio portrait photography, professional lighting, clean background, sharp focus, 8K resolution"
+        ]
+    },
+    {
+        "category": "Artistic & Illustration",
+        "prompts": [
+            "Watercolor landscape of a quiet village, dreamy soft colors, loose painting style",
+            "Oil painting of a classic sailing ship in a storm, impressionist style, vibrant color palette, visible brushstrokes",
+            "Digital art concept of a futuristic sci-fi city, hyper-detailed, epic scale, trending on ArtStation",
+            "Anime style illustration, cel shading, clean line art, pastel colors, magical girl looking at the sky"
+        ]
+    },
+    {
+        "category": "Abstract & Surreal",
+        "prompts": [
+            "Abstract expressionism painting, bold colors, dynamic composition, thick impasto textures",
+            "Surreal dreamscape with floating islands and clockwork mechanisms, Salvador Dali style, highly detailed",
+            "Macro photography of colorful ink in water, ethereal, organic shapes, vibrant",
+            "Geometric abstract 3D render, glassmorphism, glowing neon outlines, sleek dark background"
+        ]
+    },
+    {
+        "category": "Architecture & Interiors",
+        "prompts": [
+            "Architectural visualization of a modern brutalist concrete house in a snowy forest, photorealistic render",
+            "Cozy Scandinavian interior living room, natural warm lighting, wood textures, indoor plants, 4k",
+            "Cyberpunk city street market, dense neon signs, holograms, towering skyscrapers, rain-slicked streets",
+            "Interior of a grand gothic cathedral lit by stained glass windows, volumetric light rays, highly detailed"
+        ]
+    }
+]

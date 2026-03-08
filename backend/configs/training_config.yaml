@@ -1,0 +1,83 @@
+# Training Configuration — LoRA Fine-Tuning on Stable Diffusion
+# ================================================================
+# Optimized for MacBook M2 Air (Apple Silicon / MPS)
+
+run_name: "CelebA HQ LoRA Fine-tuning"
+
+model:
+  base_model: "runwayml/stable-diffusion-v1-5"
+  revision: null
+  variant: null                       # Use fp32 weights for MPS compatibility
+
+lora:
+  rank: 4                             # Lower rank = fewer params = faster training
+  alpha: 16                           # alpha/rank = 4 scaling factor
+  dropout: 0.0
+  target_modules:                     # Fewer targets = much faster per step
+    - "to_q"
+    - "to_v"
+
+dataset:
+  dataset_path: "./data/domain_images"
+  caption_column: "text"
+  image_column: "image"
+  resolution: 256                     # 256px instead of 512px = 4x less compute
+  center_crop: true
+  random_flip: true
+  min_resolution: 256
+
+training:
+  output_dir: "./models/lora_weights"
+  logging_dir: "./logs/training"
+  seed: 42
+  
+  # Batch settings — keep light for 8GB RAM
+  train_batch_size: 1
+  gradient_accumulation_steps: 2      # Effective batch = 2
+  
+  # Optimizer
+  learning_rate: 5.0e-4               # Higher LR for fewer steps
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1.0e-8
+  adam_weight_decay: 1.0e-2
+  max_grad_norm: 1.0
+  
+  # Schedule — short and fast
+  lr_scheduler: "cosine"
+  lr_warmup_steps: 5
+  max_train_steps: 50                 # 50 steps is enough for a quick test
+  
+  # Precision & Memory — MPS compatible
+  mixed_precision: "no"               # MPS doesn't support fp16 autocast well
+  gradient_checkpointing: true        # Saves memory
+  use_xformers: false                 # Not available on MPS
+  enable_cpu_offload: false
+  
+  # Checkpointing
+  save_steps: 25
+  checkpoints_total_limit: 2
+  resume_from_checkpoint: null
+  
+  # Validation
+  validation_prompt: "a portrait photo of a person, high quality, detailed face"
+  validation_negative_prompt: "low quality, blurry, distorted"
+  num_validation_images: 2
+  validation_steps: 25
+  
+  # Logging
+  log_every_n_steps: 1                # Log every step (only 50 steps total)
+  report_to: "tensorboard"
+
+inference:
+  num_inference_steps: 25
+  guidance_scale: 7.5
+  default_scheduler: "ddim"
+  safety_check: true
+
+evaluation:
+  num_eval_images: 50
+  fid_feature_layer: 2048
+  clip_model: "openai/clip-vit-base-patch32"
+  eval_prompts_file: "./data/eval_prompts.txt"
+  results_output: "./evaluation_results.json"

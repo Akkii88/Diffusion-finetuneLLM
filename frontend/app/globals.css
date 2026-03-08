@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ------------------------------------------------------------------ */
+/* Base */
+/* ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #ffffff;
+  color: #1e293b;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom Scrollbar */
+/* ------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ------------------------------------------------------------------ */
+/* Blink cursor (terminal) */
+/* ------------------------------------------------------------------ */
+@keyframes blink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.blink-cursor {
+  animation: blink 1s step-end infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/* Skeleton / shimmer */
+/* ------------------------------------------------------------------ */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pulse animation */
+/* ------------------------------------------------------------------ */
+@keyframes ping {
+
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/* Comparison slider (evaluation page) */
+/* ------------------------------------------------------------------ */
+.comparison-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.comparison-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  z-index: 10;
+}
+
+.comparison-handle-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -2px;
+  width: 4px;
+  background: white;
+  z-index: 20;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  cursor: ew-resize;
+}
+
+.comparison-handle-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 64px;
+  width: 12px;
+  background-color: white;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.comparison-handle-grip::before,
+.comparison-handle-grip::after {
+  content: '';
+  width: 2px;
+  height: 16px;
+  background-color: #a1a1aa;
+  border-radius: 1px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Range input reset */
+/* ------------------------------------------------------------------ */
+input[type=range] {
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  background: #18181b;
+  border: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  height: 12px;
+  width: 12px;
+  background: white;
+  border: 1px solid black;
+  border-radius: 0;
+  margin-top: -5.5px;
+  transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+/* ------------------------------------------------------------------ */
+/* Recharts dark overrides (kept for training loss chart) */
+/* ------------------------------------------------------------------ */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e2e8f0 !important;
+}
+
+.recharts-text {
+  fill: #64748b !important;
+  font-size: 12px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Focus */
+/* ------------------------------------------------------------------ */
+:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Masonry grid */
+/* ------------------------------------------------------------------ */
+.masonry-grid {
+  display: flex;
+  margin-left: -16px;
+  width: auto;
+}
+
+.masonry-col {
+  padding-left: 16px;
+  background-clip: padding-box;
+}

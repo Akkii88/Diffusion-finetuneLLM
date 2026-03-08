@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: diffusion-frontend:latest
+    container_name: diffusion_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - diffusion_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: diffusion-backend:latest
+    container_name: diffusion_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - MODEL_PATH=/app/models/lora_weights
+      - BASE_MODEL=runwayml/stable-diffusion-v1-5
+      - DEVICE=cpu
+    volumes:
+      - model_weights:/app/models
+      - ./backend/data:/app/data
+    networks:
+      - diffusion_net
+
+volumes:
+  model_weights:
+    driver: local
+
+networks:
+  diffusion_net:
+    driver: bridge
