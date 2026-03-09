@@ -84,28 +84,43 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 ## 🖼️ UI Screenshots
 
-<table>
-  <tr>
-    <td align="center" width="100%">
-      <img src="images/home_gui.png" width="100%" alt="Home Dashboard"/><br/>
-    </td>
-    <td align="center" width="100%">
-      <img src="images/training_gui.png" width="100%" alt="Training Interface"/><br/>
-    </td>
-    <td align="center" width="100%">
-      <img src="images/generate_gui.png" width="100%" alt="Generation Interface"/><br/>
-    </td>
-    <td align="center" width="100%">
-      <img src="images/gallery_gui.png" width="100%" alt="Gallery"/><br/>
-    </td>
-    <td align="center" width="100%">
-      <img src="images/dataset_gui.png" width="100%" alt="Dataset Management"/><br/>
-    </td>
-    <td align="center" width="100%">
-      <img src="images/evaluation_gui.png" width="100%" alt="Evaluation"/><br/>
-    </td>
-  </tr>
-</table>
+<div align="center">
+
+<img src="images/home_gui.png" width="100%" alt="Home Dashboard">
+<b>🏠 Home Dashboard</b><br>
+<sub>Overview of training runs and recent generations</sub>
+
+<br><br>
+
+<img src="images/training_gui.png" width="100%" alt="Training Interface">
+<b>🎯 Training Interface</b><br>
+<sub>Configure hyperparameters and monitor live loss curves</sub>
+
+<br><br>
+
+<img src="images/generate_gui.png" width="100%" alt="Generation Interface">
+<b>✨ Image Generation</b><br>
+<sub>Text-to-image with prompt, scheduler, and guidance controls</sub>
+
+<br><br>
+
+<img src="images/gallery_gui.png" width="100%" alt="Gallery">
+<b>🖼️ Gallery</b><br>
+<sub>Browse all generated images with metadata and star ratings</sub>
+
+<br><br>
+
+<img src="images/dataset_gui.png" width="100%" alt="Dataset Management">
+<b>🗂️ Dataset Management</b><br>
+<sub>Upload and preview training images in a grid view</sub>
+
+<br><br>
+
+<img src="images/evaluation_gui.png" width="100%" alt="Evaluation">
+<b>📊 Evaluation</b><br>
+<sub>Side-by-side comparison with CLIP scores and ratings</sub>
+
+</div>
 
 
 ## 🏗️ System Architecture
