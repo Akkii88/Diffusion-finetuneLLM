@@ -82,6 +82,37 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 ---
 
+## 🖼️ UI Screenshots
+
+<p align="center">
+  <img src="images/home_gui.png" width="48%" alt="Home Dashboard"/>
+  &nbsp;
+  <img src="images/training_gui.png" width="48%" alt="Training Interface"/>
+</p>
+<p align="center">
+  <em>Home Dashboard &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Training Interface</em>
+</p>
+
+<p align="center">
+  <img src="images/generate_gui.png" width="48%" alt="Generation Interface"/>
+  &nbsp;
+  <img src="images/gallery_gui.png" width="48%" alt="Gallery"/>
+</p>
+<p align="center">
+  <em>Image Generation &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gallery</em>
+</p>
+
+<p align="center">
+  <img src="images/dataset_gui.png" width="48%" alt="Dataset Management"/>
+  &nbsp;
+  <img src="images/evaluation_gui.png" width="48%" alt="Evaluation"/>
+</p>
+<p align="center">
+  <em>Dataset Management &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Evaluation</em>
+</p>
+
+---
+
 ## 🏗️ System Architecture
 
 ```mermaid
