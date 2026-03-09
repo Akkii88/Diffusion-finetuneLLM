@@ -92,16 +92,12 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
     <td align="center" width="100%">
       <img src="images/training_gui.png" width="100%" alt="Training Interface"/><br/>
     </td>
-  </tr>
-  <tr>
     <td align="center" width="100%">
       <img src="images/generate_gui.png" width="100%" alt="Generation Interface"/><br/>
     </td>
     <td align="center" width="100%">
       <img src="images/gallery_gui.png" width="100%" alt="Gallery"/><br/>
     </td>
-  </tr>
-  <tr>
     <td align="center" width="100%">
       <img src="images/dataset_gui.png" width="100%" alt="Dataset Management"/><br/>
     </td>
