@@ -89,7 +89,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <img src="images/dashboard.png" width="100%" alt="Home Dashboard">
 
 
-<img src="images/Generate.png" width="100%" alt="Generation Interface">
+<img src="images/Generate.png" width="100%" alt="Generation1 Interface">
 
 
 <img src="images/gallery.png" width="100%" alt="Gallery">
