@@ -63,7 +63,7 @@ The core research problem: *How do you adapt a billion-parameter diffusion model
 
 ---
 
-## 🚀 What We Improved
+## What We Improved
 
 Compared to vanilla LoRA training scripts and the original project skeleton, the following major improvements were made:
 
@@ -82,7 +82,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 ---
 
-## 🖼️ UI Screenshots
+## UI Screenshots
 
 <div align="center">
 
@@ -111,7 +111,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <br></br>
 
 <img src="images/Evaluation.png" width="100%" alt="Evaluation">
-</div> , make it more visually good
+</div>
 
 ## 🏗️ System Architecture
 
