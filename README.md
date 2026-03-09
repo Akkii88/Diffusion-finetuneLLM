@@ -110,7 +110,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
     </td>
   </tr>
 </table>
----
+
 
 ## 🏗️ System Architecture
 
