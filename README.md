@@ -86,7 +86,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 <div align="center">
 
-<img src="images/home_gui.png" width="100%" alt="Home Dashboard">
+<img src="images/dashboard.png" width="100%" alt="Home Dashboard">
 
 <br><br>
 
