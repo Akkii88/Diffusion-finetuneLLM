@@ -86,33 +86,63 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 <div align="center">
 
-<img src="images/dashboard.png" width="100%" alt="Home Dashboard">
-<br></br>
+### 🏠 Dashboard
+<img src="images/dashboard.png" width="90%" alt="Home Dashboard">
+<br><br>
 
-<img src="images/Generate.png" width="100%" alt="Generation1 Interface">
-<br></br>
+### ✨ Generation Interface
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="images/Generate.png" width="100%" alt="Generation Interface">
+<br><b>Generate Screen</b>
+</td>
+<td align="center" width="50%">
+<img src="images/dataset.png" width="100%" alt="Dataset Management">
+<br><b>Dataset Manager</b>
+</td>
+</tr>
+</table>
 
-<img src="images/training_flow.png" width="100%" alt="training_flow">
 <br>
 
+### ⚙️ Training Workflow
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="images/training_flow.png" width="100%" alt="Training Flow">
+<br><b>Training Flow</b>
+</td>
+<td align="center" width="50%">
 <img src="images/Training.png" width="100%" alt="Training Interface">
+<br><b>Training Panel</b>
+</td>
+</tr>
 
+<tr>
+<td align="center" width="50%">
+<img src="images/Training1.png" width="100%" alt="Training Step 1">
+<br><b>Training Step 1</b>
+</td>
+<td align="center" width="50%">
+<img src="images/Training2.png" width="100%" alt="Training Step 2">
+<br><b>Training Step 2</b>
+</td>
+</tr>
 
-<img src="images/Training1.png" width="100%" alt="Training1 Interface">
-
-
-<img src="images/Training2.png" width="100%" alt="Training2 Interface">
-
-
-<img src="images/Training3.png" width="100%" alt="Training3 Interface">
-<br></br>
-
-<img src="images/dataset.png" width="100%" alt="Dataset Management">
-<br></br>
-
+<tr>
+<td align="center" width="50%">
+<img src="images/Training3.png" width="100%" alt="Training Step 3">
+<br><b>Training Step 3</b>
+</td>
+<td align="center" width="50%">
 <img src="images/Evaluation.png" width="100%" alt="Evaluation">
-</div>
+<br><b>Evaluation Dashboard</b>
+</td>
+</tr>
+</table>
 
+</div>
 
 ## 🏗️ System Architecture
 
