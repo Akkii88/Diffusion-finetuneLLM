@@ -15,7 +15,7 @@
 
 ---
 
-## 📌 Table of Contents
+## Table of Contents
 
 - [What This Project Is](#-what-this-project-is)
 - [Why We Built It](#-why-we-built-it)
@@ -36,7 +36,7 @@
 
 ---
 
-## 🧠 What This Project Is
+## What This Project Is
 
 The **Diffusion Fine-tuning Platform** is a complete, end-to-end system that lets you:
 
@@ -50,7 +50,7 @@ This is **not** just a training script. It's a fully integrated product with a b
 
 ---
 
-## 💡 Why We Built It
+## Why We Built It
 
 Training generative AI models is powerful but historically required deep ML expertise and command-line tools. Our goal was to **democratize Stable Diffusion fine-tuning** by:
 
@@ -113,7 +113,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <img src="images/Evaluation.png" width="100%" alt="Evaluation">
 </div>
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TB
@@ -157,7 +157,7 @@ graph TB
 
 ---
 
-## 📐 How LoRA Works — The Theory
+## How LoRA Works — The Theory
 
 ### What is LoRA?
 
@@ -209,7 +209,7 @@ In this implementation, LoRA adapters are added **only to the UNet** attention l
 
 ---
 
-## 🔄 Training Pipeline Flowchart
+## Training Pipeline Flowchart
 
 ```mermaid
 flowchart TD
@@ -248,7 +248,7 @@ flowchart TD
 
 ---
 
-## ⚡ Generation Pipeline Flowchart
+## Generation Pipeline Flowchart
 
 ```mermaid
 flowchart TD
@@ -274,16 +274,16 @@ flowchart TD
     L --> M["Upload PNG to\nSupabase Storage"]
     M --> N["Save metadata to\ngenerations table"]
     N --> O["Return image_url,\nclip_score, seed, time_ms"]
-    O --> P["🖼️ Image displayed\nin browser + Gallery"]
+    O --> P["Image displayed\nin browser + Gallery"]
 
     style DENOISE fill:#fff3e0,stroke:#ff9800
 ```
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 Training Pipeline
+### Training Pipeline
 - **LoRA Fine-tuning** via `PEFT` library — only 0.5–2% of parameters trained
 - **Custom Dataset Support** — upload any domain-specific images via the UI
 - **Real-time Progress** — live training log streaming (SSE) + Supabase step/loss sync
@@ -295,7 +295,7 @@ flowchart TD
 - **Apple Silicon Support** — auto-detects MPS and disables `mixed_precision` to avoid crashes
 - **xFormers Support** — optional memory-efficient attention for large batch training
 
-### 🖼️ Image Generation
+### Image Generation
 - **Text-to-Image** generation from any prompt
 - **Negative Prompt** support to exclude unwanted concepts
 - **Guidance Scale Control** — balance between prompt adherence and creativity
@@ -303,13 +303,13 @@ flowchart TD
 - **Seed Control** — reproducible generations
 - **Dual-Layer Safety Filtering** — prompt text + generated image both checked
 
-### 📊 Evaluation & Gallery
+### Evaluation & Gallery
 - **CLIP Score** — automatic alignment metric between image and prompt
 - **Community Ratings** — star rating system on any gallery image
 - **Side-by-Side Comparison** — base model vs. fine-tuned model output
 - **Full Metadata Storage** — every generation tracked (prompt, seed, steps, guidance, time)
 
-### 🗂️ Dataset Management
+### Dataset Management
 - **Batch Upload** — upload multiple images at once via the browser
 - **Image Preview Grid** — browse your dataset with instant previews
 - **Optimistic UI Updates** — newly uploaded images appear immediately without refresh
@@ -317,7 +317,7 @@ flowchart TD
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ```mermaid
 graph LR
@@ -336,7 +336,7 @@ graph LR
 
     subgraph ML["ML / AI"]
         PT["PyTorch"]
-        D["🤗 Diffusers"]
+        D["Diffusers"]
         PEFT["PEFT (LoRA)"]
         ACC["Accelerate"]
         CLIP2["CLIP"]
@@ -374,7 +374,7 @@ graph LR
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 diffusion-finetune/
@@ -432,7 +432,7 @@ diffusion-finetune/
 
 ---
 
-## 💻 How to Run on Your PC
+## How to Run on Your PC
 
 ### Prerequisites
 
@@ -552,10 +552,10 @@ docker-compose down
 
 | Service | URL |
 |---------|-----|
-| 🌐 Frontend (Web App) | http://localhost:3000 |
-| ⚙️ Backend API | http://localhost:8000 |
-| 📚 API Documentation (Swagger) | http://localhost:8000/docs |
-| 📖 API Docs (ReDoc) | http://localhost:8000/redoc |
+| Frontend (Web App) | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| API Documentation (Swagger) | http://localhost:8000/docs |
+| API Docs (ReDoc) | http://localhost:8000/redoc |
 
 ---
 
@@ -587,7 +587,7 @@ docker-compose down
 
 ---
 
-## 🔧 Environment Variables
+## Environment Variables
 
 ### Frontend (`.env.local`)
 
@@ -606,7 +606,7 @@ docker-compose down
 
 ---
 
-## 📡 API Reference
+## API Reference
 
 ### Generation
 
@@ -673,7 +673,7 @@ POST /generate
 
 ---
 
-## 🗄️ Database Schema
+## Database Schema
 
 ```mermaid
 erDiagram
@@ -734,7 +734,7 @@ erDiagram
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Backend won't start
 
@@ -781,13 +781,13 @@ lsof -ti:3000 | xargs kill -9
 
 ---
 
-## 🙏 Acknowledgements
+## Acknowledgements
 
 This project builds on the shoulders of giants:
 
-- [🤗 Hugging Face Diffusers](https://github.com/huggingface/diffusers) — the diffusion model framework
-- [🤗 PEFT](https://github.com/huggingface/peft) — LoRA and parameter-efficient fine-tuning
-- [🤗 Accelerate](https://github.com/huggingface/accelerate) — multi-GPU and MPS training orchestration
+- [Hugging Face Diffusers](https://github.com/huggingface/diffusers) — the diffusion model framework
+- [PEFT](https://github.com/huggingface/peft) — LoRA and parameter-efficient fine-tuning
+- [Accelerate](https://github.com/huggingface/accelerate) — multi-GPU and MPS training orchestration
 - [Stability AI](https://stability.ai/) — Stable Diffusion base models
 - [OpenAI CLIP](https://github.com/openai/CLIP) — image-text alignment scoring
 - [Supabase](https://supabase.com/) — open-source Firebase alternative
