@@ -89,6 +89,12 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <img src="images/dashboard.png" width="100%" alt="Home Dashboard">
 
 
+<img src="images/Generate.png" width="100%" alt="Generation Interface">
+
+
+<img src="images/gallery.png" width="100%" alt="Gallery">
+
+
 <img src="images/Training.png" width="100%" alt="Training Interface">
 
 
@@ -101,19 +107,10 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <img src="images/Training3.png" width="100%" alt="Training3 Interface">
 
 
-<img src="images/generate_gui.png" width="100%" alt="Generation Interface">
+<img src="images/dataset.png" width="100%" alt="Dataset Management">
 
-<br><br>
 
-<img src="images/gallery_gui.png" width="100%" alt="Gallery">
-
-<br><br>
-
-<img src="images/dataset_gui.png" width="100%" alt="Dataset Management">
-
-<br><br>
-
-<img src="images/evaluation_gui.png" width="100%" alt="Evaluation">
+<img src="images/Evaluation.png" width="100%" alt="Evaluation">
 </div>
 
 
