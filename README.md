@@ -86,43 +86,30 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 <table>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/home_gui.png" width="100%" alt="Home Dashboard"/><br/>
-      <b>🏠 Home Dashboard</b><br/>
-      <sub>Overview of training runs and recent generations</sub>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/training_gui.png" width="100%" alt="Training Interface"/><br/>
-      <b>🎯 Training Interface</b><br/>
-      <sub>Configure hyperparameters and monitor live loss curves</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/generate_gui.png" width="100%" alt="Generation Interface"/><br/>
-      <b>✨ Image Generation</b><br/>
-      <sub>Text-to-image with prompt, scheduler, and guidance controls</sub>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/gallery_gui.png" width="100%" alt="Gallery"/><br/>
-      <b>🖼️ Gallery</b><br/>
-      <sub>Browse all generated images with metadata and star ratings</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/dataset_gui.png" width="100%" alt="Dataset Management"/><br/>
-      <b>🗂️ Dataset Management</b><br/>
-      <sub>Upload and preview training images in a grid view</sub>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="100%">
       <img src="images/evaluation_gui.png" width="100%" alt="Evaluation"/><br/>
-      <b>📊 Evaluation</b><br/>
-      <sub>Side-by-side comparison with CLIP scores and ratings</sub>
     </td>
   </tr>
 </table>
-
 ---
 
 ## 🏗️ System Architecture
