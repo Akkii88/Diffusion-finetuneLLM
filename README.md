@@ -87,10 +87,10 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <div align="center">
 
 <img src="images/dashboard.png" width="100%" alt="Home Dashboard">
-<br>
+<br></br>
 
 <img src="images/Generate.png" width="100%" alt="Generation1 Interface">
-<br>
+<br></br>
 
 <img src="images/training_flow.png" width="100%" alt="training_flow">
 <br>
