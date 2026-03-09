@@ -92,7 +92,7 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 <img src="images/Generate.png" width="100%" alt="Generation1 Interface">
 
 
-<img src="images/gallery.png" width="100%" alt="Gallery">
+<img src="images/training_flow.png" width="100%" alt="Gallery">
 
 
 <img src="images/Training.png" width="100%" alt="Training Interface">
