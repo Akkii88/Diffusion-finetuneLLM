@@ -105,10 +105,10 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 
 <img src="images/Training3.png" width="100%" alt="Training3 Interface">
-<br>
+<br></br>
 
 <img src="images/dataset.png" width="100%" alt="Dataset Management">
-<br>
+<br></br>
 
 <img src="images/Evaluation.png" width="100%" alt="Evaluation">
 </div>
