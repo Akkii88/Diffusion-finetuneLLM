@@ -90,7 +90,25 @@ Compared to vanilla LoRA training scripts and the original project skeleton, the
 
 <br><br>
 
-<img src="images/training_gui.png" width="100%" alt="Training Interface">
+<img src="images/Training.png" width="100%" alt="Training Interface">
+
+<br><br>
+
+<br><br>
+
+<img src="images/Training1.png" width="100%" alt="Training1 Interface">
+
+<br><br>
+
+<br><br>
+
+<img src="images/Training2.png" width="100%" alt="Training2 Interface">
+
+<br><br>
+
+<br><br>
+
+<img src="images/Training3.png" width="100%" alt="Training3 Interface">
 
 <br><br>
 
