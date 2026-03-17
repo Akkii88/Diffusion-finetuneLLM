@@ -17,6 +17,7 @@ class InferencePipeline:
         self.base_model = base_model
         self.device = device if torch.cuda.is_available() else "cpu"
         self._pipe: Any = None
+        self._lora_loaded = False
 
     def load(self) -> None:
         """Load base model + LoRA weights into memory."""
@@ -60,6 +61,27 @@ class InferencePipeline:
         pipe.enable_attention_slicing()
 
         self._pipe = pipe
+        self._lora_loaded = True
+
+    def set_lora_enabled(self, enabled: bool) -> None:
+        """Enable or disable LoRA weights."""
+        if self._pipe is None:
+            return
+        if not hasattr(self._pipe, 'unet') or not hasattr(self._pipe.unet, 'peft_config'):
+            return  # No LoRA loaded
+        
+        if enabled:
+            try:
+                self._pipe.unet.set_adapter("default")
+                self._lora_loaded = True
+            except Exception as e:
+                print(f"Failed to enable LoRA: {e}")
+        else:
+            try:
+                self._pipe.unet.disable_adapters()
+                self._lora_loaded = False
+            except Exception as e:
+                print(f"Failed to disable LoRA: {e}")
         print(f"Pipeline ready on {self.device}")
 
     def _set_scheduler(self, scheduler_name: str) -> None:

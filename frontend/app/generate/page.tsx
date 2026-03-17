@@ -142,7 +142,7 @@ export default function GeneratePage() {
     }, [prompt, isPending, handleGenerate]);
 
     return (
-        <div className="bg-white font-body text-zinc-900 min-h-screen flex flex-col overflow-hidden antialiased">
+        <div className="relative bg-white font-body text-zinc-900 min-h-screen flex flex-col overflow-hidden antialiased">
             <Navbar />
 
             <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">

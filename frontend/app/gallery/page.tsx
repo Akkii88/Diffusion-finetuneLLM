@@ -55,7 +55,7 @@ export default function GalleryPage() {
         : allItems;
 
     return (
-        <div className="min-h-screen bg-white flex flex-col font-body">
+        <div className="relative min-h-screen bg-white flex flex-col font-body">
             <Navbar />
 
             <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-12">
@@ -189,7 +189,13 @@ export default function GalleryPage() {
                                             : "border-zinc-200 text-zinc-600 hover:border-black hover:text-black"
                                             }`}
                                     >
-                                        {r === 1 ? "👍" : r === -1 ? "👎" : "○"}
+                                        {r === 1 ? (
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        ) : r === -1 ? (
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                        ) : (
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
+                                        )}
                                     </button>
                                 ))}
                                 <a href={selectedItem.image_url} download className="ml-auto">
@@ -215,10 +221,24 @@ export default function GalleryPage() {
 }
 
 function GalleryCard({ item, onClick, onRate }: { item: GalleryItem; onClick: () => void; onRate: (r: -1 | 0 | 1) => void }) {
+    const [isFavorite, setIsFavorite] = useState(false);
+    
     return (
         <div className="relative group cursor-pointer rounded-xl overflow-hidden border border-zinc-200 bg-white shadow-sm hover:shadow-xl hover:border-zinc-400 transition-all duration-300 aspect-[3/4] flex flex-col" onClick={onClick}>
             <img src={item.image_url} alt={item.prompt} className="w-full h-[75%] object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-300" loading="lazy" />
-            <div className="flex-1 bg-white p-3 flex flex-col justify-between">
+            {/* Favorite Button */}
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsFavorite(!isFavorite);
+                }}
+                className="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow-md hover:scale-110 transition-transform group-hover:opacity-100 opacity-0"
+            >
+                <svg className={`w-5 h-5 ${isFavorite ? "text-red-500 fill-red-500" : "text-zinc-400"}`} fill={isFavorite ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
+            <div className="flex-1 bg-gray-50 p-3 flex flex-col justify-between">
                 <p className="text-[10px] text-zinc-500 font-mono line-clamp-2 leading-tight">{item.prompt}</p>
                 <div className="flex items-center justify-between mt-2">
                     {item.clip_score && (
@@ -231,9 +251,15 @@ function GalleryCard({ item, onClick, onRate }: { item: GalleryItem; onClick: ()
                             <button
                                 key={r}
                                 onClick={() => onRate(r)}
-                                className={`text-xs w-6 h-6 rounded flex items-center justify-center font-bold transition-all ${item.human_rating === r ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"}`}
+                                className={`text-xs w-6 h-6 rounded flex items-center justify-center font-bold transition-all ${item.human_rating === r ? "bg-black text-white" : "bg-gray-100 text-gray-400 hover:bg-black hover:text-white"}`}
                             >
-                                {r === 1 ? "✓" : r === -1 ? "✗" : "○"}
+                                {r === 1 ? (
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                                ) : r === -1 ? (
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                                ) : (
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M20 12H4" /></svg>
+                                )}
                             </button>
                         ))}
                     </div>

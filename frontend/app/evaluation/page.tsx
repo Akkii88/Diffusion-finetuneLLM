@@ -16,21 +16,44 @@ function ComparisonSlider({ prompt, baseSrc, ftSrc }: { prompt: string; baseSrc:
         setPosition(pct);
     };
 
+    // Handle mouse/touch down - start dragging
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        isDragging.current = true;
+        move(e.clientX);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        isDragging.current = true;
+        move(e.touches[0].clientX);
+    };
+
+    // Handle mouse move globally
     useEffect(() => {
-        const onMove = (e: MouseEvent | TouchEvent) => {
+        const handleMouseMove = (e: MouseEvent) => {
             if (!isDragging.current) return;
-            move("touches" in e ? e.touches[0].clientX : e.clientX);
+            move(e.clientX);
         };
-        const onUp = () => { isDragging.current = false; };
-        window.addEventListener("mousemove", onMove);
-        window.addEventListener("touchmove", onMove);
-        window.addEventListener("mouseup", onUp);
-        window.addEventListener("touchend", onUp);
+
+        const handleTouchMove = (e: TouchEvent) => {
+            if (!isDragging.current) return;
+            move(e.touches[0].clientX);
+        };
+
+        const handleEnd = () => {
+            isDragging.current = false;
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("touchmove", handleTouchMove);
+        window.addEventListener("mouseup", handleEnd);
+        window.addEventListener("touchend", handleEnd);
+
         return () => {
-            window.removeEventListener("mousemove", onMove);
-            window.removeEventListener("touchmove", onMove);
-            window.removeEventListener("mouseup", onUp);
-            window.removeEventListener("touchend", onUp);
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("mouseup", handleEnd);
+            window.removeEventListener("touchend", handleEnd);
         };
     }, []);
 
@@ -45,8 +68,8 @@ function ComparisonSlider({ prompt, baseSrc, ftSrc }: { prompt: string; baseSrc:
             <div
                 ref={wrapperRef}
                 className="relative w-full aspect-[21/9] bg-slate-100 overflow-hidden cursor-ew-resize select-none"
-                onMouseDown={(e) => { isDragging.current = true; move(e.clientX); }}
-                onTouchStart={(e) => { isDragging.current = true; move(e.touches[0].clientX); }}
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
             >
                 {/* Fine-tuned image — full background */}
                 <img
@@ -55,38 +78,38 @@ function ComparisonSlider({ prompt, baseSrc, ftSrc }: { prompt: string; baseSrc:
                     className="absolute inset-0 w-full h-full object-cover"
                     draggable={false}
                 />
-                <div className="absolute top-4 right-4 bg-[#f4f4f5] text-black px-3 py-1 rounded text-xs font-bold uppercase tracking-wider pointer-events-none shadow-sm">
-                    Fine-Tuned Output
+                <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider pointer-events-none">
+                    Fine-Tuned LoRA
                 </div>
 
                 {/* Base image — same size/crop, clipped from right */}
                 <img
                     src={baseSrc}
-                    alt="Original training data"
+                    alt="Base model"
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
                     draggable={false}
                 />
                 <div
-                    className="absolute top-4 left-4 bg-[#f4f4f5] text-black px-3 py-1 rounded text-xs font-bold uppercase tracking-wider pointer-events-none shadow-sm"
+                    className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-xs font-bold uppercase tracking-wider pointer-events-none"
                     style={{ opacity: position > 10 ? 1 : 0 }}
                 >
-                    Original Data
+                    Base Model (SD v1.5)
                 </div>
 
                 {/* Divider line */}
                 <div
-                    className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.4)] pointer-events-none"
+                    className="absolute top-0 bottom-0 w-[3px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.4)] cursor-ew-resize"
                     style={{ left: `${position}%`, transform: "translateX(-50%)" }}
                 />
 
                 {/* Drag handle */}
                 <div
-                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 bg-white rounded-full shadow-md flex items-center justify-center pointer-events-none"
+                    className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center cursor-ew-resize hover:scale-110 transition-transform"
                     style={{ left: `${position}%` }}
                 >
-                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 7H17M1 7L5 3M1 7L5 11M17 7L13 3M17 7L13 11" stroke="#64748b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <svg width="20" height="16" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 7H17M1 7L5 3M1 7L5 11M17 7L13 3M17 7L13 11" stroke="#1e293b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </div>
             </div>
@@ -126,7 +149,7 @@ export default function EvaluationPage() {
     const hasEvalImages = true; // Always render comparison section
 
     return (
-        <div className="min-h-screen bg-white flex flex-col font-body">
+        <div className="relative min-h-screen bg-white flex flex-col font-body">
             <Navbar />
 
             <main className="flex-1 flex justify-center py-10 px-4 sm:px-6">
@@ -231,7 +254,7 @@ export default function EvaluationPage() {
                             <div>
                                 <h2 className="text-slate-900 text-2xl font-bold leading-tight">Visual Comparison</h2>
                                 <p className="text-slate-500 text-sm mt-2">
-                                    Interactive comparison. Left: Original training data. Right: Fine-Tuned LoRA output.
+                                    Interactive comparison. Left: Base Stable Diffusion v1.5. Right: Fine-Tuned LoRA output.
                                 </p>
                             </div>
                             <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500">

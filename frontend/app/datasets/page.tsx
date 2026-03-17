@@ -299,7 +299,7 @@ export default function DatasetsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col font-body">
+    <div className="relative min-h-screen bg-white flex flex-col font-body">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-12">

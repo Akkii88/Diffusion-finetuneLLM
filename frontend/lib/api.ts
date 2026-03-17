@@ -146,6 +146,13 @@ export async function fetchMetrics(): Promise<MetricsResponse> {
     return apiFetch("/metrics", MetricsResponseSchema, {}, API_URL);
 }
 
+export async function fetchTrainingHistory(): Promise<{runs: any[]}> {
+    const res = await fetch(`${API_URL}/metrics/history`, {
+        cache: 'no-store',
+    });
+    return res.json();
+}
+
 export async function updateRating(id: string, rating: -1 | 0 | 1): Promise<void> {
     await fetch(`${API_URL}/gallery/${id}/rating?rating=${rating}`, { method: "PATCH" });
 }
@@ -166,6 +173,7 @@ export type TrainingStartResponse = z.infer<typeof TrainingStartResponseSchema>;
 
 export async function startTraining(params?: {
     run_name?: string;
+    dataset_id?: string;  // NEW: Supabase dataset ID
     dataset_path?: string;
     lora_rank?: number;
     learning_rate?: number;

@@ -53,15 +53,14 @@ def _append_log(line: str) -> None:
 
 
 class _LogCapture(io.TextIOBase):
-    """A file-like object that tees all writes to _append_log AND the real stdout/stderr."""
+    """A file-like object that captures writes to log buffer WITHOUT writing to terminal."""
 
     def __init__(self, real_stream):
         self._real = real_stream
         self._line_buf = ""
 
     def write(self, s: str) -> int:
-        self._real.write(s)
-        self._real.flush()
+        # Only write to log buffer, NOT to terminal
         self._line_buf += s
         while "\n" in self._line_buf:
             line, self._line_buf = self._line_buf.split("\n", 1)
@@ -69,7 +68,7 @@ class _LogCapture(io.TextIOBase):
         return len(s)
 
     def flush(self):
-        self._real.flush()
+        pass  # Do nothing - no terminal output
 
     @property
     def encoding(self):
@@ -90,6 +89,7 @@ _training_config: Optional[dict] = None
 class TrainingRequest(BaseModel):
     """Request to start a new training run."""
     run_name: Optional[str] = None
+    dataset_id: Optional[str] = None  # NEW: Supabase dataset ID
     dataset_path: Optional[str] = None
     lora_rank: Optional[int] = None
     learning_rate: Optional[float] = None
@@ -116,6 +116,7 @@ def _run_training_background(
     run_id: str,
     config_dict: dict,
     run_name: str,
+    dataset_id: Optional[str] = None,
 ) -> None:
     """Background function to run training and update Supabase."""
     global _training_active
@@ -146,6 +147,47 @@ def _run_training_background(
 
         # Convert relative paths to absolute paths based on backend directory
         backend_dir = Path(__file__).parent.parent.parent
+
+        # === DOWNLOAD FROM SUPABASE IF DATASET_ID PROVIDED ===
+        if dataset_id:
+            _append_log(f"INFO [system] Downloading dataset from Supabase...")
+            import tempfile
+            import shutil
+            
+            temp_dir = tempfile.mkdtemp()
+            dataset_download_path = Path(temp_dir) / "dataset_images"
+            dataset_download_path.mkdir(parents=True, exist_ok=True)
+            
+            try:
+                # Fetch images from Supabase
+                images_response = supabase.table("dataset_images").select("*").eq("dataset_id", dataset_id).execute()
+                
+                if not images_response.data or len(images_response.data) == 0:
+                    raise Exception(f"No images found in dataset {dataset_id}")
+                
+                _append_log(f"INFO [system] Found {len(images_response.data)} images, downloading...")
+                
+                for idx, image_record in enumerate(images_response.data):
+                    storage_path = image_record["storage_path"]
+                    filename = image_record["filename"]
+                    
+                    try:
+                        response = supabase.storage.from_("dataset-images").download(storage_path)
+                        image_path = dataset_download_path / filename
+                        with open(image_path, "wb") as f:
+                            f.write(response)
+                    except Exception as e:
+                        _append_log(f"WARN [system] Failed to download {storage_path}: {e}")
+                        continue
+                
+                _append_log(f"INFO [system] Downloaded {len(images_response.data)} images")
+                cfg.dataset.dataset_path = str(dataset_download_path)
+                
+            except Exception as e:
+                _append_log(f"ERROR [system] Failed to download dataset: {e}")
+                if Path(temp_dir).exists():
+                    shutil.rmtree(temp_dir, ignore_errors=True)
+                raise e
 
         if cfg.dataset.dataset_path and not Path(cfg.dataset.dataset_path).is_absolute():
             cfg.dataset.dataset_path = str(backend_dir / cfg.dataset.dataset_path)
@@ -226,6 +268,8 @@ async def start_training(request: TrainingRequest) -> TrainingStartResponse:
     cfg = OmegaConf.load(str(config_path))
 
     # Apply custom parameters
+    if request.dataset_id:
+        cfg.dataset.dataset_id = request.dataset_id
     if request.dataset_path:
         cfg.dataset.dataset_path = request.dataset_path
     if request.lora_rank:
@@ -242,7 +286,24 @@ async def start_training(request: TrainingRequest) -> TrainingStartResponse:
     # Create training run record
     import uuid
     run_id = str(uuid.uuid4())
-    run_name = request.run_name or f"run_{run_id[:8]}"
+    
+    # Use dataset name in run_name if dataset_id is provided
+    dataset_name = None
+    if request.dataset_id:
+        try:
+            ds_response = supabase.table("datasets").select("name").eq("id", request.dataset_id).execute()
+            if ds_response.data and len(ds_response.data) > 0:
+                dataset_name = ds_response.data[0].get("name")
+        except:
+            pass
+    
+    # Build run_name: use provided name, or dataset name, or default
+    if request.run_name:
+        run_name = request.run_name
+    elif dataset_name:
+        run_name = f"{dataset_name} LoRA Training"
+    else:
+        run_name = f"run_{run_id[:8]}"
 
     run_data = {
         "id": run_id,
@@ -261,7 +322,7 @@ async def start_training(request: TrainingRequest) -> TrainingStartResponse:
     # Start training in a background thread (non-blocking)
     thread = threading.Thread(
         target=_run_training_background,
-        args=(run_id, OmegaConf.to_container(cfg, resolve=True), run_name),
+        args=(run_id, OmegaConf.to_container(cfg, resolve=True), run_name, request.dataset_id),
         daemon=True,
     )
     thread.start()

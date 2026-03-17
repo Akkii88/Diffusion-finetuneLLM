@@ -52,18 +52,18 @@ export default function HomePage() {
     const [quickPrompt, setQuickPrompt] = useState("");
     const [quickImage, setQuickImage] = useState<string | null>(null);
     const [quickMeta, setQuickMeta] = useState<{ time?: number; seed?: number } | null>(null);
-    
+
     // Keyboard shortcuts handler
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Require Ctrl/Cmd key to prevent accidental navigation
             if (!e.ctrlKey && !e.metaKey) return;
-            
+
             // Don't trigger if user is typing in an input
             if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
                 return;
             }
-            
+
             switch (e.key.toLowerCase()) {
                 case "g":
                     router.push("/generate");
@@ -86,7 +86,7 @@ export default function HomePage() {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [router]);
-    
+
     const { data: metrics } = useQuery({
         queryKey: ["metrics"],
         queryFn: fetchMetrics,
@@ -286,10 +286,10 @@ export default function HomePage() {
                                     {recentImages.map((item) => (
                                         <Link key={item.id} href="/gallery" className="group">
                                             <div className="aspect-square rounded-lg overflow-hidden border border-zinc-200 group-hover:border-zinc-400 transition-colors">
-                                                <img 
-                                                    src={item.image_url} 
-                                                    alt={item.prompt} 
-                                                    className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all" 
+                                                <img
+                                                    src={item.image_url}
+                                                    alt={item.prompt}
+                                                    className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all"
                                                 />
                                             </div>
                                         </Link>
@@ -308,44 +308,43 @@ export default function HomePage() {
                 {/* Two Column Layout: System Health (full width) */}
                 <section className="w-full max-w-[860px] px-6 pb-8">
                     {/* System Health */}
-                        <div className="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
-                            <div className="px-6 py-4 border-b border-zinc-100">
-                                <h3 className="font-display font-semibold text-zinc-900 flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-lg">monitor_heart</span>
-                                    System Status
-                                </h3>
-                            </div>
-                            <div className="p-4">
-                                <div className="space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm text-zinc-600">Training Status</span>
-                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${
-                                            isTraining 
-                                                ? "bg-zinc-100 border-zinc-200 text-zinc-700 animate-pulse" 
-                                                : "bg-green-50 border-green-200 text-green-700"
+                    <div className="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden">
+                        <div className="px-6 py-4 border-b border-zinc-100">
+                            <h3 className="font-display font-semibold text-zinc-900 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-lg">monitor_heart</span>
+                                System Status
+                            </h3>
+                        </div>
+                        <div className="p-4">
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-zinc-600">Training Status</span>
+                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border ${isTraining
+                                        ? "bg-zinc-100 border-zinc-200 text-zinc-700 animate-pulse"
+                                        : "bg-green-50 border-green-200 text-green-700"
                                         }`}>
-                                            <span className={`size-2 rounded-full ${isTraining ? "bg-zinc-500" : "bg-green-500"}`} />
-                                            {isTraining ? "Running" : "Idle"}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm text-zinc-600">Backend API</span>
-                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border bg-green-50 border-green-200 text-green-700">
-                                            <span className="size-2 rounded-full bg-green-500" />
-                                            Online
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm text-zinc-600">Model Loaded</span>
-                                        <span className="text-xs font-mono text-zinc-900">SD v1.5</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-sm text-zinc-600">Session Time</span>
-                                        <span className="text-xs font-mono text-zinc-900">{metrics?.total_generated ? "Active" : "—"}</span>
-                                    </div>
+                                        <span className={`size-2 rounded-full ${isTraining ? "bg-zinc-500" : "bg-green-500"}`} />
+                                        {isTraining ? "Running" : "Idle"}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-zinc-600">Backend API</span>
+                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border bg-green-50 border-green-200 text-green-700">
+                                        <span className="size-2 rounded-full bg-green-500" />
+                                        Online
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-zinc-600">Model Loaded</span>
+                                    <span className="text-xs font-mono text-zinc-900">SD v1.5</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-zinc-600">Session Time</span>
+                                    <span className="text-xs font-mono text-zinc-900">{metrics?.total_generated ? "Active" : "—"}</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </section>
 
                 {/* Keyboard Shortcuts + Getting Started */}

@@ -25,6 +25,7 @@ class GenerateRequest(BaseModel):
     guidance_scale: float = Field(default=7.5, ge=1.0, le=30.0)
     seed: int = Field(default=-1)  # -1 = random
     scheduler: str = Field(default="ddim")
+    use_lora: bool = Field(default=True)  # Whether to use LoRA weights
 
     @field_validator("scheduler")
     @classmethod
@@ -88,6 +89,10 @@ async def generate_image(body: GenerateRequest, request: Request) -> GenerateRes
         )
 
     # 3. Generate image
+    # Enable/disable LoRA based on request
+    if hasattr(pipeline, 'set_lora_enabled'):
+        pipeline.set_lora_enabled(body.use_lora)
+    
     t0 = time.perf_counter()
     result = pipeline.generate(
         prompt=body.prompt,

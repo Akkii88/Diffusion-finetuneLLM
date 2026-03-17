@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { startTraining, stopTraining, fetchMetrics, fetchTrainingLogs } from "@/lib/api";
+import { startTraining, stopTraining, fetchMetrics, fetchTrainingLogs, fetchTrainingHistory } from "@/lib/api";
 import Navbar from "@/components/layout/Navbar";
 import NoSSR from "@/components/ui/NoSSR";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area, BarChart, Bar, Legend, ReferenceLine } from "recharts";
@@ -23,6 +23,31 @@ interface Dataset {
     description?: string;
 }
 
+// Preset configurations
+const PRESET_CONFIGS = {
+    best: {
+        run_name: "LoRA-Best",
+        lora_rank: 32,
+        learning_rate: 0.00005,
+        max_train_steps: 750,
+        train_batch_size: 2,
+    },
+    fast: {
+        run_name: "LoRA-Fast",
+        lora_rank: 4,
+        learning_rate: 0.0005,
+        max_train_steps: 100,
+        train_batch_size: 1,
+    },
+    custom: {
+        run_name: "LoRA-Custom",
+        lora_rank: 16,
+        learning_rate: 0.0001,
+        max_train_steps: 500,
+        train_batch_size: 2,
+    },
+};
+
 // Fetch datasets from API
 async function fetchDatasets(): Promise<Dataset[]> {
     const response = await fetch('/api/datasets');
@@ -39,6 +64,16 @@ export default function TrainingPage() {
 
     // Selected dataset from datasets page
     const [selectedDataset, setSelectedDataset] = useState<{id: string; name: string; image_count: number} | null>(null);
+
+    // Training history state
+    const [showHistory, setShowHistory] = useState(false);
+
+    // Query to fetch training history
+    const { data: trainingHistory = { runs: [] }, isLoading: isLoadingHistory } = useQuery({
+        queryKey: ["trainingHistory"],
+        queryFn: fetchTrainingHistory,
+        enabled: showHistory,
+    });
 
     // Query to fetch all available datasets
     const { data: datasets = [], isLoading: isLoadingDatasets } = useQuery({
@@ -74,13 +109,13 @@ export default function TrainingPage() {
         }
     }, [showDatasetDropdown]);
 
-    const [config, setConfig] = useState<TrainingConfig>({
-        run_name: "SD-LoRA-v1",
-        lora_rank: 4,
-        learning_rate: 0.0005,
-        max_train_steps: 50,
-        train_batch_size: 1,
-    });
+    const [config, setConfig] = useState<TrainingConfig>(PRESET_CONFIGS.best);
+
+    // Function to apply preset
+    const applyPreset = (preset: 'best' | 'fast' | 'custom') => {
+        setConfig(PRESET_CONFIGS[preset]);
+        toast.success(`Applied ${preset === 'best' ? 'Best Results' : preset === 'fast' ? 'Fast Results' : 'Custom'} preset`);
+    };
 
     // Modal state for confirmation
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -221,17 +256,17 @@ export default function TrainingPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen w-full bg-background-light antialiased">
+        <div className="relative flex flex-col min-h-screen w-full bg-white antialiased">
             <Navbar />
 
-            <main className="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
+            <main className="relative flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
                 <div className="mx-auto max-w-7xl flex flex-col gap-8">
 
                     {/* Page title */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex flex-col gap-1">
                             <h2 className="text-3xl font-bold text-slate-900 tracking-tight font-display">
-                                {metrics?.run_name ?? config.run_name ?? "Training Dashboard"}
+                                {selectedDataset ? `${selectedDataset.name} Training` : (metrics?.run_name ?? config.run_name ?? "Training Dashboard")}
                             </h2>
                             <p className="text-slate-500 text-sm">
                                 {isRunning ? (
@@ -248,6 +283,13 @@ export default function TrainingPage() {
                                 title="Refresh metrics"
                             >
                                 <span className="material-symbols-outlined text-lg">refresh</span>
+                            </button>
+                            <button
+                                onClick={() => setShowHistory(true)}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white border border-slate-300 text-slate-800 text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors"
+                                title="View training history"
+                            >
+                                <span className="material-symbols-outlined text-lg">history</span>
                             </button>
                             {isRunning ? (
                                 <button
@@ -457,6 +499,31 @@ export default function TrainingPage() {
                                                     )}
                                                 </div>
                                             )}
+                                        </div>
+
+                                        {/* Preset Buttons */}
+                                        <div className="flex gap-2 mb-4">
+                                            <button
+                                                onClick={() => applyPreset('best')}
+                                                disabled={isRunning}
+                                                className="flex-1 bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                Best Results
+                                            </button>
+                                            <button
+                                                onClick={() => applyPreset('fast')}
+                                                disabled={isRunning}
+                                                className="flex-1 bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                Fast Results
+                                            </button>
+                                            <button
+                                                onClick={() => applyPreset('custom')}
+                                                disabled={isRunning}
+                                                className="flex-1 bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg hover:bg-black hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                                Custom
+                                            </button>
                                         </div>
 
                                         {[
@@ -831,7 +898,10 @@ export default function TrainingPage() {
                             <button
                                 onClick={() => {
                                     setShowConfirmModal(false);
-                                    startMutation.mutate(config);
+                                    startMutation.mutate({
+                                        ...config,
+                                        dataset_id: selectedDataset?.id,
+                                    });
                                 }}
                                 disabled={startMutation.isPending}
                                 className="flex-1 px-4 py-2.5 rounded-lg bg-black text-white font-semibold hover:bg-zinc-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
@@ -839,6 +909,48 @@ export default function TrainingPage() {
                                 <span className="material-symbols-outlined text-lg">play_arrow</span>
                                 {startMutation.isPending ? "Starting..." : "Start Training"}
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Training History Modal */}
+            {showHistory && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowHistory(false)} />
+                    <div className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col">
+                        <div className="flex items-center justify-between p-5 border-b border-slate-200">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-slate-100 rounded-lg">
+                                    <span className="material-symbols-outlined text-slate-600 text-xl">history</span>
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-900">Training History</h3>
+                            </div>
+                            <button onClick={() => setShowHistory(false)} className="p-2 hover:bg-slate-100 rounded-lg">
+                                <span className="material-symbols-outlined text-slate-500">close</span>
+                            </button>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-5">
+                            {isLoadingHistory ? (
+                                <div className="flex justify-center py-10"><span className="material-symbols-outlined text-4xl text-slate-400 animate-spin">sync</span></div>
+                            ) : trainingHistory.runs && trainingHistory.runs.length > 0 ? (
+                                <div className="space-y-3">
+                                    {trainingHistory.runs.map((run: any, i: number) => (
+                                        <div key={run.id || i} className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+                                            <div className="flex justify-between mb-2">
+                                                <span className="font-semibold">{run.run_name || `Run ${i+1}`}</span>
+                                                <span className={`px-2 py-0.5 rounded text-xs ${run.status==='completed'?'bg-green-100 text-green-700':run.status==='running'?'bg-blue-100 text-blue-700':'bg-red-100 text-red-700'}`}>{run.status}</span>
+                                            </div>
+                                            <div className="grid grid-cols-4 gap-2 text-sm text-slate-600">
+                                                <div>Steps: <span className="text-slate-900 font-medium">{run.current_step||0}/{run.total_steps||0}</span></div>
+                                                <div>Rank: <span className="text-slate-900 font-medium">{run.lora_rank||'-'}</span></div>
+                                                <div>Loss: <span className="text-slate-900 font-medium">{run.final_loss?.toFixed(4)||'-'}</span></div>
+                                                <div>CLIP: <span className="text-slate-900 font-medium">{run.clip_score?.toFixed(3)||'-'}</span></div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : <div className="text-center py-10 text-slate-500">No training history found</div>}
                         </div>
                     </div>
                 </div>

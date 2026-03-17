@@ -5,6 +5,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ------------------------------------------------------------------ */
+/* Dark Mode CSS Variables */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Light mode colors */
+  --background: #ffffff;
+  --background-subtle: #f8f9fc;
+  --foreground: #1e293b;
+  --foreground-muted: #64748b;
+  --border-color: #e4e4e7;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(255, 255, 255, 0.2);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --input-bg: #ffffff;
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  
+  /* Particle colors for light mode */
+  --particle-primary: #000000;
+  --particle-secondary: #64748b;
+  --particle-glow: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  /* Dark mode colors */
+  --background: #0f172a;
+  --background-subtle: #1e293b;
+  --foreground: #f8fafc;
+  --foreground-muted: #94a3b8;
+  --border-color: #334155;
+  --card-bg: rgba(15, 23, 42, 0.7);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --input-bg: #1e293b;
+  --hover-bg: rgba(255, 255, 255, 0.05);
+  
+  /* Particle colors for dark mode */
+  --particle-primary: #f8fafc;
+  --particle-secondary: #64748b;
+  --particle-glow: rgba(248, 250, 252, 0.1);
+}
+
+/* ------------------------------------------------------------------ */
 /* Base */
 /* ------------------------------------------------------------------ */
 *,

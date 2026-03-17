@@ -68,6 +68,20 @@ async def get_metrics() -> MetricsResponse:
         log_path = backend_dir / model_path
     log_path = log_path / "training_log.json"
     
+    # Read config to get total_steps
+    config_path = backend_dir / "configs" / "training_config.yaml"
+    configured_total_steps = 500  # Default
+    if config_path.exists():
+        try:
+            with open(config_path) as cf:
+                config_data = yaml.safe_load(cf)
+                configured_total_steps = config_data.get("training", {}).get("max_train_steps", 500)
+                metrics.lora_rank = config_data.get("lora", {}).get("rank", 16)
+                metrics.run_name = config_data.get("run_name", "LoRA Fine-tuning")
+                metrics.learning_rate = config_data.get("training", {}).get("learning_rate")
+        except Exception as e:
+            print(f"Could not read config: {e}")
+    
     if log_path.exists():
         try:
             with open(log_path) as f:
@@ -76,20 +90,14 @@ async def get_metrics() -> MetricsResponse:
             if metrics.training_log:
                 metrics.current_step = metrics.training_log[-1].step
                 metrics.final_loss = metrics.training_log[-1].train_loss
-                metrics.total_steps = metrics.training_log[-1].step
-                metrics.status = "completed"  # If log exists, training completed
+                # Use configured total_steps, not current step
+                metrics.total_steps = configured_total_steps
+                # If current step < total steps, training is still running
+                if metrics.current_step < configured_total_steps:
+                    metrics.status = "running"
+                else:
+                    metrics.status = "completed"
                 metrics.learning_rate = metrics.training_log[-1].learning_rate
-                # Get run name from config if available
-                config_path = backend_dir / "configs" / "training_config.yaml"
-                if config_path.exists():
-                    try:
-                        import yaml
-                        with open(config_path) as cf:
-                            config_data = yaml.safe_load(cf)
-                            metrics.run_name = config_data.get("run_name", "LoRA Fine-tuning")
-                            metrics.lora_rank = config_data.get("lora", {}).get("rank", 16)
-                    except:
-                        pass
         except Exception as e:
             print(f"Could not read training_log.json: {e}")
 
@@ -143,3 +151,76 @@ async def get_metrics() -> MetricsResponse:
             metrics.clip_score = eval_data.get("clip_score_finetuned")
 
     return metrics.model_dump()
+
+@router.get("/history")
+async def get_training_history():
+    """Get all training runs history."""
+    supabase = _get_supabase()
+    
+    try:
+        run_res = (
+            supabase.table("training_runs")
+            .select("*")
+            .order("created_at", desc=True)
+            .limit(20)
+            .execute()
+        )
+        
+        # Also get local training logs
+        backend_dir = Path(__file__).parent.parent.parent
+        model_path = os.getenv("MODEL_PATH", str(backend_dir / "models" / "lora_weights"))
+        log_path = Path(model_path)
+        if not log_path.is_absolute():
+            log_path = backend_dir / model_path
+        
+        local_history = []
+        checkpoint_dirs = sorted([d for d in log_path.iterdir() if d.is_dir() and d.name.startswith("checkpoint-")], 
+                                  key=lambda x: int(x.name.split("-")[1]) if x.name.split("-")[1].isdigit() else 0)
+        
+        for checkpoint_dir in checkpoint_dirs:
+            config_file = checkpoint_dir / "adapter_config.json"
+            if config_file.exists():
+                try:
+                    with open(config_file) as f:
+                        config = json.load(f)
+                    step = int(checkpoint_dir.name.split("-")[1]) if checkpoint_dir.name.split("-")[1].isdigit() else 0
+                    local_history.append({
+                        "run_name": f"Checkpoint {step}",
+                        "status": "completed",
+                        "current_step": step,
+                        "total_steps": step,
+                        "lora_rank": config.get("r", 16),
+                        "created_at": checkpoint_dir.stat().st_mtime,
+                    })
+                except:
+                    pass
+        
+        # Combine both sources
+        all_runs = []
+        
+        # Add Supabase runs
+        if run_res.data:
+            for run in run_res.data:
+                all_runs.append({
+                    "id": run.get("id"),
+                    "run_name": run.get("run_name", "Training"),
+                    "status": run.get("status", "unknown"),
+                    "current_step": run.get("current_step", 0),
+                    "total_steps": run.get("total_steps", 0),
+                    "final_loss": run.get("final_loss"),
+                    "lora_rank": run.get("lora_rank"),
+                    "fid_score": run.get("fid_score"),
+                    "clip_score": run.get("clip_score"),
+                    "created_at": run.get("created_at"),
+                })
+        
+        # Add local checkpoints
+        for local_run in local_history:
+            all_runs.append(local_run)
+        
+        # Sort by date descending
+        all_runs.sort(key=lambda x: x.get("created_at", 0), reverse=True)
+        
+        return {"runs": all_runs[:20]}
+    except Exception as e:
+        return {"error": str(e), "runs": []}

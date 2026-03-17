@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
@@ -30,8 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     rel="stylesheet"
                 />
             </head>
-            <body className="bg-white font-body antialiased text-text-main selection:bg-zinc-200 selection:text-black">
-                <Providers>
+            <body className="bg-white font-body antialiased text-slate-900 selection:bg-zinc-200 selection:text-black">
+                <ThemeProvider>
+                    <Providers>
                     {children}
                     <Toaster
                         position="top-right"
@@ -50,6 +52,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         }}
                     />
                 </Providers>
+                </ThemeProvider>
             </body>
         </html>
     );

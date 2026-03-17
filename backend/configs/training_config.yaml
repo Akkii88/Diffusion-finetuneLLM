@@ -1,27 +1,35 @@
 # Training Configuration — LoRA Fine-Tuning on Stable Diffusion
 # ================================================================
-# Optimized for MacBook M2 Air (Apple Silicon / MPS)
+# IMPROVED CONFIG - Optimized for better quality & faster convergence
 
-run_name: "CelebA HQ LoRA Fine-tuning"
+run_name: "LoRA Fine-tuning"
 
 model:
   base_model: "runwayml/stable-diffusion-v1-5"
   revision: null
-  variant: null                       # Use fp32 weights for MPS compatibility
+  variant: null
 
 lora:
-  rank: 4                             # Lower rank = fewer params = faster training
-  alpha: 16                           # alpha/rank = 4 scaling factor
-  dropout: 0.0
-  target_modules:                     # Fewer targets = much faster per step
+  # INCREASED from 16 to 32 - Higher rank captures more detail
+  rank: 32
+  # Adjusted alpha for better scaling balance  
+  alpha: 64
+  # Reduced dropout for less regularization
+  dropout: 0.05
+  # FIXED: Use only supported target modules (no GEGLU layers)
+  target_modules:
     - "to_q"
+    - "to_k"
     - "to_v"
+    - "to_out.0"
 
 dataset:
+  # Default - will be overridden by Supabase dataset_id when training from UI
   dataset_path: "./data/domain_images"
   caption_column: "text"
   image_column: "image"
-  resolution: 256                     # 256px instead of 512px = 4x less compute
+  # REDUCED to 384 for faster training while maintaining quality
+  resolution: 384
   center_crop: true
   random_flip: true
   min_resolution: 256
@@ -31,22 +39,22 @@ training:
   logging_dir: "./logs/training"
   seed: 42
   
-  # Batch settings — keep light for 8GB RAM
-  train_batch_size: 1
-  gradient_accumulation_steps: 2      # Effective batch = 2
+  # INCREASED batch size for more stable gradients
+  train_batch_size: 2
+  gradient_accumulation_steps: 4      # Effective batch = 8
   
-  # Optimizer
-  learning_rate: 5.0e-4               # Higher LR for fewer steps
+  # LOWERED learning rate for stable training with more steps
+  learning_rate: 5.0e-5
   adam_beta1: 0.9
   adam_beta2: 0.999
   adam_epsilon: 1.0e-8
   adam_weight_decay: 1.0e-2
   max_grad_norm: 1.0
   
-  # Schedule — short and fast
-  lr_scheduler: "cosine"
-  lr_warmup_steps: 5
-  max_train_steps: 50                 # 50 steps is enough for a quick test
+  # MORE steps for proper convergence
+  lr_scheduler: "cosine"             # Cosine decay = smoother
+  lr_warmup_steps: 100               # More warmup
+  max_train_steps: 750                # More steps
   
   # Precision & Memory — MPS compatible
   mixed_precision: "no"               # MPS doesn't support fp16 autocast well
@@ -55,22 +63,22 @@ training:
   enable_cpu_offload: false
   
   # Checkpointing
-  save_steps: 25
-  checkpoints_total_limit: 2
+  save_steps: 100
+  checkpoints_total_limit: 3
   resume_from_checkpoint: null
   
   # Validation
-  validation_prompt: "a portrait photo of a person, high quality, detailed face"
-  validation_negative_prompt: "low quality, blurry, distorted"
-  num_validation_images: 2
-  validation_steps: 25
+  validation_prompt: "a luxury car, high quality, detailed, 8k, photorealistic, studio lighting"
+  validation_negative_prompt: "low quality, blurry, distorted, deformed, ugly, bad anatomy, watermark, text"
+  num_validation_images: 4
+  validation_steps: 100
   
   # Logging
-  log_every_n_steps: 1                # Log every step (only 50 steps total)
+  log_every_n_steps: 10
   report_to: "tensorboard"
 
 inference:
-  num_inference_steps: 25
+  num_inference_steps: 50
   guidance_scale: 7.5
   default_scheduler: "ddim"
   safety_check: true
